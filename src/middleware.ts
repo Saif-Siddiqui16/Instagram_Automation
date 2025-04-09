@@ -1,6 +1,6 @@
 
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
-/*
+
 const isProtectedRoute = createRouteMatcher([
     '/dashboard(.*)', 
     '/callback(.*)',
@@ -12,7 +12,6 @@ export default clerkMiddleware(async (auth, req) => {
 })
 
   
-*/
 export const config = {
   matcher: [
     // Skip Next.js internals and all static files, unless found in search params
