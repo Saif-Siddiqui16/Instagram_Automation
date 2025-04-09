@@ -4,6 +4,7 @@ import { toast } from "sonner";
 
 export const useMutationData=(
     mutationKey:MutationKey,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     mutationFn:MutationFunction<any,any>,
     queryKey?: string,
     onSuccess?: () => void,
@@ -34,6 +35,7 @@ export const useMutationDataState=(mutationKey:MutationKey)=>{
         filters: { mutationKey },
         select: (mutation) => {
             return {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 variables: mutation.state.variables as any,
                 status: mutation.state.status
             }
