@@ -1,3 +1,4 @@
+/*
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 
 const isProtectedRoute = createRouteMatcher([
@@ -20,3 +21,4 @@ export const config = {
   runtime: 'experimental-edge',
 }
 
+*/
