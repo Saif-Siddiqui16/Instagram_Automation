@@ -17,7 +17,7 @@ const AutomationsBreadCrumb = ({ id }: Props) => {
     const { data } = useQueryAutomation(id);
     // console.log('useQueryAutomationdata-->', data);
 
-    const { edit, enableEdit, disableEdit, inputRef, isPending } = useEditAutomation(id);
+    const { edit, enableEdit, inputRef, isPending } = useEditAutomation(id);
     // console.log('useEditAutomation elements-->', edit, enableEdit, disableEdit, inputRef, isPending)
 
     const { latestVariable } = useMutationDataState(['update-automation'])

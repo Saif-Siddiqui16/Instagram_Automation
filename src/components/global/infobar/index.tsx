@@ -1,9 +1,8 @@
-import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { Menu } from 'lucide-react';
-import React from 'react';
-import Sidebar from '../sidebar';
 import { Button } from '@/components/ui/button';
+import { Sheet, SheetClose, SheetContent, SheetFooter, SheetTrigger } from '@/components/ui/sheet';
+import { Menu } from 'lucide-react';
 import CreateAutomation from '../create-automation';
+import Sidebar from '../sidebar';
 
 type Props={
     slug:string

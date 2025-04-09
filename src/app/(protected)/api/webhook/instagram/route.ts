@@ -1,10 +1,8 @@
 import { findAutomation } from "@/actions/automations/queries";
 import { createChatHistory, getChatHistory, getKeywordAutomation, getKeywordPost, matchKeyword, trackResponses } from "@/actions/webhook/queries";
 import { sendDM, sendPrivateMessage } from "@/lib/fetch";
-import { openai } from "@/lib/openai";
-import { client } from "@/lib/prisma";
-import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
     const hub = req.nextUrl.searchParams.get('hub.challenge')
@@ -42,12 +40,15 @@ export async function POST(req: NextRequest) {
 
                 if (automation && automation.trigger) {
                     if (automation.listener && automation.listener.listener === 'MESSAGE') {
+                        const token = automation.User?.integrations[0]?.token;
+                        if (!token) throw new Error('Token is missing.');
+
                         const direct_message = await sendDM(
                             webhook_payload.entry[0].id,
                             webhook_payload.entry[0].messaging[0].sender.id,
                             automation.listener?.prompt,
                             
-                            automation.User?.integrations[0].token!
+                            token
                         )
 
                         if (direct_message.status === 200) {
@@ -85,14 +86,14 @@ export async function POST(req: NextRequest) {
                         // if (smart_ai_message.choices[0].message.content) {
                         if (smart_ai_message.response.text()) {
 
-                            const receiver = createChatHistory(
+                            await createChatHistory(
                                 automation.id,
                                 webhook_payload.entry[0].id,
                                 webhook_payload.entry[0].messaging[0].sender.id,
                                 webhook_payload.entry[0].messaging[0].message.text
                             )
 
-                            const sender = createChatHistory(
+                            await createChatHistory(
                                 automation.id,
                                 webhook_payload.entry[0].id,
                                 webhook_payload.entry[0].messaging[0].sender.id,
@@ -102,12 +103,14 @@ export async function POST(req: NextRequest) {
 
                             // await client.$transaction([receiver, sender])
 
-
+                            const token = automation.User?.integrations[0]?.token;
+                            if (!token) throw new Error('Token is missing.');
+    
                             const direct_message = await sendDM(
                                 webhook_payload.entry[0].id,
                                 webhook_payload.entry[0].messaging[0].sender.id,
                                 smart_ai_message.response.text(),
-                                automation.User?.integrations[0].token!
+token
                             )
 
                             if (direct_message.status === 200) {
@@ -136,21 +139,27 @@ export async function POST(req: NextRequest) {
                     false
                 )
 
+                const automationId = automation?.id;
+                        if (!automationId) throw new Error('Automation is missing.');
+
 
                 const automations_post = await getKeywordPost(
                     webhook_payload.entry[0].changes[0].value.media.id,
-                    automation?.id!
+                    automationId
                 )
 
 
                 if (automation && automations_post && automation.trigger) {
                     if (automation.listener) {
                         if (automation.listener.listener === 'MESSAGE') {
+                            
+                            const token = automation.User?.integrations[0]?.token;
+                            if (!token) throw new Error('Token is missing.');
                             const direct_message = await sendPrivateMessage(
                                 webhook_payload.entry[0].id,
                                 webhook_payload.entry[0].changes[0].value.id,
                                 automation.listener?.prompt,
-                                automation.User?.integrations[0].token!
+                               token
                             )
 
                             console.log('dm sent')
@@ -190,14 +199,14 @@ export async function POST(req: NextRequest) {
                             // if (smart_ai_message.choices[0].message.content) {
                             if (smart_ai_message.response.text()) {
 
-                                const receiver = createChatHistory(
+                                await createChatHistory(
                                     automation.id,
                                     webhook_payload.entry[0].id,
                                     webhook_payload.entry[0].changes[0].value.from.id,
                                     webhook_payload.entry[0].changes[0].value.text
                                 )
 
-                                const sender = createChatHistory(
+                                await createChatHistory(
                                     automation.id,
                                     webhook_payload.entry[0].id,
                                     webhook_payload.entry[0].changes[0].value.from.id,
@@ -206,12 +215,13 @@ export async function POST(req: NextRequest) {
 
 
                                 // await client.$transaction([receiver, sender])
-
+                                const token = automation.User?.integrations[0]?.token;
+                                if (!token) throw new Error('Token is missing.');
                                 const direct_message = await sendPrivateMessage(
                                     webhook_payload.entry[0].id,
                                     webhook_payload.entry[0].changes[0].value.id,
                                     smart_ai_message.response.text(),
-                                    automation.User?.integrations[0].token!
+token
                                 )
 
                                 if (direct_message.status === 200) {
@@ -308,14 +318,14 @@ export async function POST(req: NextRequest) {
 
                     if (aiResponse) {
 
-                        const receiver = createChatHistory(
+                        await createChatHistory(
                             automation.id,
                             webhook_payload.entry[0].id,
                             webhook_payload.entry[0].messaging[0].sender.id,
                             webhook_payload.entry[0].messaging[0].message.text
                         )
 
-                        const sender = createChatHistory(
+                        await createChatHistory(
                             automation.id,
                             webhook_payload.entry[0].id,
                             webhook_payload.entry[0].messaging[0].sender.id,
@@ -325,11 +335,13 @@ export async function POST(req: NextRequest) {
 
                         // await client.$transaction([receiver, sender])
 
+                        const token = automation.User?.integrations[0]?.token;
+                        if (!token) throw new Error('Token is missing.');
                         const direct_message = await sendDM(
                             webhook_payload.entry[0].id,
                             webhook_payload.entry[0].messaging[0].sender.id,
                             aiResponse,
-                            automation.User?.integrations[0].token!
+token
                         )
 
                         if (direct_message.status === 200) {
@@ -356,6 +368,7 @@ export async function POST(req: NextRequest) {
             { status: 200 }
         )
     } catch (error) {
+console.log(error)
         return NextResponse.json(
             { message: 'No automation set' },
             { status: 200 }
