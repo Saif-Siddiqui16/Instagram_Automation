@@ -57,6 +57,7 @@ export const onUserInfo = async () => {
 
         return { status: 404 };
     } catch (error) {
+        console.log(error)
         return { status: 500 }
     }
 }

@@ -6,28 +6,24 @@ import { zodResolver } from '@hookform/resolvers/zod'
 const useZodForm=(
     schema:ZodSchema,
     mutation:UseMutateFunction,
-    defaultValues?:any
+    
 )=>{
 
     const{
         register,
         formState: { errors },
         handleSubmit,
-        watch,
-        reset
+       
     }=useForm({
     resolver:zodResolver(schema),
-    defaultValues:{
-        ...defaultValues
-    }
+    defaultValues:{ }
     })
     const onFormSubmit=handleSubmit(async(values)=>mutation({...values}))
     return {
         register,
         errors,
         onFormSubmit,
-        watch,
-        reset
+       
     }
 }
 

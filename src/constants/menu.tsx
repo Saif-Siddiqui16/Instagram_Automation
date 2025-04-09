@@ -1,4 +1,4 @@
-import { AutomationDuoToneWhite, HomeDuoToneWhite, RocketDuoToneWhite, SettingsDuoToneWhite } from '@/icons';
+import { AutomationDuoToneWhite, HomeDuoToneWhite, RocketDuoToneWhite } from '@/icons';
 import { v4 as uuid } from 'uuid';
 
 export type FieldProps = {

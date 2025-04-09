@@ -13,6 +13,7 @@ export const createAutomations = async (id?: string) => {
 
         return { status: 404, data: 'Oops! Something went wrong!' }
     } catch (error) {
+        console.log(error)
         return { status: 500, data: 'Internal server Error.' }
     }
 }
@@ -26,6 +27,7 @@ export const getAllAutomations = async () => {
         return { status: 404, data: [] }
 
     } catch (error) {
+        console.log(error)
         return { status: 500, data: [] }
     }
 }
@@ -39,6 +41,7 @@ export const getAutomationInfo = async (id: string) => {
 
         return { status: 404 }
     } catch (error) {
+        console.log(error)
         return { status: 500 }
     }
 }
@@ -59,6 +62,7 @@ export const updateAutomationName = async (
         }
         return { status: 404, data: 'Oops! Could not find automation.' }
     } catch (error) {
+        console.log(error)
         return { status: 500, data: 'Oops! Something went wrong.' }
     }
 }
@@ -75,6 +79,7 @@ export const saveListener = async (
         if (create) return { status: 200, data: 'Listner Created' }
         return { status: 404, data: 'Cant save Listner' }
     } catch (error) {
+        console.log(error)
         return { status: 500, data: 'Oops! Something went wrong' }
     }
 }
@@ -86,8 +91,10 @@ export const saveTrigger = async (automationId: string, trigger: string[]) => {
         if (create) return { status: 200, data: 'Trigger saved' }
         return { status: 400, data: 'Cannot save trigger' }
     } catch (error) {
+        console.log(error)
         return { status: 500, data: 'Oops! Something went wrong' }
     }
+
 }
 
 export const saveKeyword = async (automationId: string, keyword: string) => {
@@ -98,6 +105,7 @@ export const saveKeyword = async (automationId: string, keyword: string) => {
         if (create) return { status: 200, data: 'Keyword added successfully' }
         return { status: 400, data: 'Cannot add this keyword' }
     } catch (error) {
+        console.log(error)
         return { status: 500, data: 'Oops! Something went wrong' }
     }
 }
@@ -114,6 +122,7 @@ export const deleteKeyword = async (id: string) => {
 
         return { status: 404, data: 'Keyword not found' }
     } catch (error) {
+        console.log(error)
         return { status: 500, data: 'Oops! Something went wrong' }
     }
 }
@@ -157,6 +166,7 @@ export const savePosts = async (
 
         return { status: 400, data: 'Automation not found' }
     } catch (error) {
+        console.log(error)
         return { status: 500, data: 'Oops! Something went wrong' }
     }
 }
@@ -174,6 +184,7 @@ export const activateAutomation = async (id: string, state: boolean) => {
 
         return { status: 404, data: 'Automation not found' }
     } catch (error) {
+ console.log(error)
         return { status: 500, data: 'Oops! Something went wrong' }
     }
 }
